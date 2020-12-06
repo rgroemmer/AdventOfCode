@@ -40,7 +40,7 @@ func main() {
 		panic(err)
 	}
 
-	treeMap := helper.ReadeFile(r)
+	treeMap := helper.ReadeFileByLine(r)
 	treeMap = treeMap[1:]
 
 	r1d1 := getTreeCount(treeMap, 1, false)

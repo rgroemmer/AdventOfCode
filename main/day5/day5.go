@@ -43,7 +43,7 @@ func main() {
 	if err != nil {
 		println("Error: ", err)
 	}
-	seatList := helper.ReadeFile(r)
+	seatList := helper.ReadeFileByLine(r)
 	var ids []int
 	for _, seat := range seatList {
 		id := getSeatId(getInt(seat[:7]), getInt(seat[7:]))

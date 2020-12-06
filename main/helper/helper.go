@@ -20,7 +20,7 @@ func ReadInts(r io.Reader) ([]int, error) {
 	return result, scanner.Err()
 }
 
-func ReadeFile(r io.Reader) []string {
+func ReadeFileByLine(r io.Reader) []string {
 	scanner := bufio.NewScanner(r)
 	scanner.Split(bufio.ScanLines)
 	var result []string
@@ -29,4 +29,9 @@ func ReadeFile(r io.Reader) []string {
 		result = append(result, x)
 	}
 	return result
+}
+func ReadeFile(r io.Reader) string {
+	scanner := bufio.NewScanner(r)
+	scanner.Scan()
+	return scanner.Text()
 }
