@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func countOfYesAnswers(group string) int {
+func countAnyone(group string) int {
 	var result string
 	for _, char := range group {
 		if !strings.Contains(result, string(char)) && char != ',' {
@@ -26,9 +26,9 @@ func isInOther(char string, others []string) bool {
 	return count == len(others)
 }
 
-func countOfYesAnswers2(groups string) int {
-	first := strings.Split(groups, ",")[0]
-	others := strings.Split(groups, ",")[1:]
+func countEveryone(group string) int {
+	first := strings.Split(group, ",")[0]
+	others := strings.Split(group, ",")[1:]
 	var count int
 	for _, char := range first {
 		if isInOther(string(char), others) {
@@ -48,8 +48,8 @@ func main() {
 	var magicNumber2 int
 
 	for _, group := range groups {
-		magicNumber += countOfYesAnswers(group)
-		magicNumber2 += countOfYesAnswers2(group)
+		magicNumber += countAnyone(group)
+		magicNumber2 += countEveryone(group)
 	}
 	println("MagicNumber: ", magicNumber)
 	println("MagicNumber2: ", magicNumber2)
