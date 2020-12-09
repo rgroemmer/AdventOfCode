@@ -8,7 +8,8 @@ import (
 func checkPassport(passport string) bool {
 	var requiredFileds = [7]string{"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"}
 	for _, field := range requiredFileds {
-		if !strings.Contains(passport, field) {
+		if !strings.Contains(pa		op := strings.Split(ops[i], " ")[0]
+		println(op)ssport, field) {
 			return false
 		}
 	}
