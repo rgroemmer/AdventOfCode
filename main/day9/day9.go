@@ -40,29 +40,27 @@ func main() {
 		println("Error: ", err)
 	}
 	numberList, _ := helper.ReadInts(r)
-	//numberList := []int{35,20,15,25,47,40,62,55,65,95,102,117,150,182,127,219,299,277,309,576}
 
 	var j int
-	var magicNumb int
-	for i := 5; i < len(numberList)-1; i++ {
+	part1 := 0
+	for i := 25; i < len(numberList)-1; i++ {
 		preamble := numberList[j:i]
 		checkValue := numberList[i]
 		if !checkNumbs(preamble, checkValue) {
-			magicNumb = checkValue
+			part1 = checkValue
 		}
 		j++
 	}
+	println("part1: ", part1)
 
 	y := 0
-	for i := 5; i < len(numberList)-1; i++ {
+	for i := 25; i < len(numberList)-1; i++ {
 		preamble := numberList[y:i]
-		subset := findSubset(preamble, magicNumb)
+		subset := findSubset(preamble, part1)
 		if subset != nil && len(subset) > 1 {
 			sort.Ints(subset)
 			println("part2: ", subset[0]+subset[len(subset)-1])
 		}
-
 		y++
 	}
-	println("magic Number: ", magicNumb)
 }
