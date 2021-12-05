@@ -47,12 +47,11 @@ func containsBoard(b []Board, e Board) bool {
 }
 
 func (b *Board) checkWin(playedNumbers []string) bool {
-
-	//check vertical wins
 	for j := 0; j < 5; j++ {
 		horizontal := b.Fields[0][j]
 		vertical := b.Fields[j][0]
 
+		//check vertical rows
 		if containsString(playedNumbers, horizontal) {
 			for i := 1; i < 5; i++ {
 				value := b.Fields[i][j]
@@ -65,6 +64,7 @@ func (b *Board) checkWin(playedNumbers []string) bool {
 			}
 		}
 
+		//check horizontal
 		if containsString(playedNumbers, vertical) {
 			for i := 1; i < 5; i++ {
 				value := b.Fields[j][i]
@@ -76,7 +76,6 @@ func (b *Board) checkWin(playedNumbers []string) bool {
 				}
 			}
 		}
-
 	}
 
 	return false
