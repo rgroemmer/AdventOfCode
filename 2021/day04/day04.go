@@ -47,20 +47,39 @@ func containsBoard(b []Board, e Board) bool {
 }
 
 func (b *Board) checkWin(playedNumbers []string) bool {
-	firstRow := b.Fields[0]
-	var horizontalCount int
-	var verticalCount int
 
-	for i, value := range firstRow {
-		if containsString(playedNumbers, value) {
-			horizontalCount++
+	//check vertical wins
+	for j := 0; j < 5; j++ {
+		horizontal := b.Fields[0][j]
+		vertical := b.Fields[j][0]
+
+		if containsString(playedNumbers, horizontal) {
+			for i := 1; i < 5; i++ {
+				value := b.Fields[i][j]
+				if !containsString(playedNumbers, value) {
+					break
+				}
+				if i == 4 {
+					return true
+				}
+			}
 		}
-		verticalValue := b.Fields[i][0]
-		if containsString(playedNumbers, verticalValue) {
-			verticalCount++
+
+		if containsString(playedNumbers, vertical) {
+			for i := 1; i < 5; i++ {
+				value := b.Fields[j][i]
+				if !containsString(playedNumbers, value) {
+					break
+				}
+				if i == 4 {
+					return true
+				}
+			}
 		}
+
 	}
-	return (horizontalCount == 5) || (verticalCount == 5)
+
+	return false
 }
 
 func (b *Board) getAll() []string {
@@ -164,9 +183,8 @@ func part2(input []string) (result int) {
 			for _, board := range boards {
 				if board.checkWin(numbersPlayed) {
 					if !containsBoard(winners, board) {
-
+						winners = append(winners, board)
 					}
-					winners = append(winners, board)
 					if len(winners) == len(boards) {
 						winningNumber, _ = strconv.Atoi(number)
 						isLast = true
