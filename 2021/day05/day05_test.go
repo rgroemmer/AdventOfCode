@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestDay0(t *testing.T) {
+func TestDay05(t *testing.T) {
 	t.Run("Part1", func(t *testing.T) {
 		r, _ := os.ReadFile("test.txt")
 		s, _ := helper.InputToStringSlice(string(r))

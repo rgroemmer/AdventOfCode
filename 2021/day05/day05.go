@@ -6,12 +6,12 @@ import (
 	"os"
 )
 
-func part1(input []string)  (result int) {
+func part1(input []string) (result int) {
 
 	return
 }
 
-func part2(input []string)  (result int) {
+func part2(input []string) (result int) {
 
 	return
 }
