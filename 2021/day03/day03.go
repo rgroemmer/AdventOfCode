@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func isMostCommonBitHigh(input []string,pos int) bool {
+func isMostCommonBitHigh(input []string, pos int) bool {
 	var highcount int
 	var lowcount int
 
@@ -15,17 +15,17 @@ func isMostCommonBitHigh(input []string,pos int) bool {
 		runes := []rune(number)
 		actNumb := runes[pos]
 
-		if actNumb == '1'{
+		if actNumb == '1' {
 			highcount++
 		}
-		if actNumb == '0'{
+		if actNumb == '0' {
 			lowcount++
 		}
 	}
 	return highcount >= lowcount
 }
 
-func isLeastCommonBitHigh(input []string,pos int) bool {
+func isLeastCommonBitHigh(input []string, pos int) bool {
 	var highcount int
 	var lowcount int
 
@@ -33,23 +33,23 @@ func isLeastCommonBitHigh(input []string,pos int) bool {
 		runes := []rune(number)
 		actNumb := runes[pos]
 
-		if actNumb == '1'{
+		if actNumb == '1' {
 			highcount++
 		}
-		if actNumb == '0'{
+		if actNumb == '0' {
 			lowcount++
 		}
 	}
 	return highcount < lowcount
 }
 
-func isBitAtPosHigh(numb string, pos int)  bool{
+func isBitAtPosHigh(numb string, pos int) bool {
 	runes := []rune(numb)
 	actNumb := runes[pos]
 	return actNumb == '1'
 }
 
-func part1(input []string)  (result int){
+func part1(input []string) (result int) {
 	var gamma int
 	var epsilon int
 
@@ -65,7 +65,7 @@ func part1(input []string)  (result int){
 	return gamma * epsilon
 }
 
-func part2(input []string)  (result int64){
+func part2(input []string) (result int64) {
 	var temp []string
 	var oxy int64
 	var c02 int64

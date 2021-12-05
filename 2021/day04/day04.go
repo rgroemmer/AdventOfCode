@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-type Board struct{
+type Board struct {
 	Fields [5][5]string
 }
 
@@ -17,7 +17,7 @@ func newBoard(rows []string) Board {
 	for i := 0; i < 5; i++ {
 		row := strings.Split(rows[i], " ")
 		j := 0
-		for _, value := range row{
+		for _, value := range row {
 			if value == "" {
 				continue
 			}
@@ -105,7 +105,7 @@ func calcBoardScore(board Board, playedNumbers []string) int {
 	return score
 }
 
-func getBoardsAndNumbers(input []string) (playingNumbers []string, boards []Board){
+func getBoardsAndNumbers(input []string) (playingNumbers []string, boards []Board) {
 	var fields []string
 
 	for i, row := range input {
