@@ -64,7 +64,7 @@ func (b *Board) checkWin(playedNumbers []string) bool {
 			}
 		}
 
-		//check horizontal
+		//check horizontal rows
 		if containsString(playedNumbers, vertical) {
 			for i := 1; i < 5; i++ {
 				value := b.Fields[j][i]
