@@ -18,10 +18,6 @@ type point struct {
 	y int
 }
 
-func (v *ventLine) getHighXandY() (x, y int) {
-
-}
-
 func main() {
 	r, err := os.ReadFile("input.txt")
 	if err != nil {
