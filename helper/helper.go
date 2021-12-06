@@ -5,14 +5,16 @@ import (
 	"strings"
 )
 
-func InputToIntSlice(input string) ([]int, error) {
+func InputToIntSlice(input, seperator string) ([]int, error) {
 	var i []int
 	for _, line := range strings.Split(strings.TrimSuffix(input, "\n"), "\n") {
-		lineInt, err := strconv.Atoi(line)
-		if err != nil {
-			return nil, err
+		for _, substring := range strings.Split(line, seperator) {
+			lineInt, err := strconv.Atoi(substring)
+			if err != nil {
+				return nil, err
+			}
+			i = append(i, lineInt)
 		}
-		i = append(i, lineInt)
 	}
 	return i, nil
 }
