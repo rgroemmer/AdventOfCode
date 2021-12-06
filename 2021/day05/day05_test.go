@@ -11,7 +11,7 @@ func TestDay05(t *testing.T) {
 		r, _ := os.ReadFile("test.txt")
 		s, _ := helper.InputToStringSlice(string(r))
 
-		got := part1(s)
+		got := part1(s, 10)
 		expected := 5
 
 		if got != expected {
@@ -22,8 +22,8 @@ func TestDay05(t *testing.T) {
 		r, _ := os.ReadFile("test.txt")
 		s, _ := helper.InputToStringSlice(string(r))
 
-		got := part2(s)
-		expected := 1924
+		got := part2(s, 10)
+		expected := 12
 
 		if got != expected {
 			t.Errorf("expected '%v' but got '%v'", expected, got)

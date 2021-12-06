@@ -8,88 +8,18 @@ import (
 	"strings"
 )
 
-type line struct {
-	startx, starty, endx, endy int
+type ventLine struct {
+	start point
+	end   point
 }
 
-func parseInput(input []string) (lines []line) {
-	for _, s := range input {
-		split := strings.Split(s, ",")
-
-		startx, _ := strconv.Atoi(split[0])
-		starty, _ := strconv.Atoi(split[1])
-		endx, _ := strconv.Atoi(split[2])
-		endy, _ := strconv.Atoi(split[3])
-
-		lines = append(lines, line{
-			startx: startx,
-			starty: starty,
-			endx:   endx,
-			endy:   endy,
-		})
-	}
-	return
+type point struct {
+	x int
+	y int
 }
 
-func part1(input []string) (result int) {
-	lines := parseInput(input)
-	var field [10][10]int
+func (v *ventLine) getHighXandY() (x, y int) {
 
-	for _, line := range lines {
-		if line.startx == line.endx || line.starty == line.endy {
-			drawLine(line, &field)
-			printField(field)
-		}
-	}
-
-	return
-}
-
-func printField(field [10][10]int) {
-	for i := 0; i < 10; i++ {
-		for j := 0; j < 10; j++ {
-			value := field[j][i]
-			fmt.Print(value)
-		}
-		println("")
-	}
-	fmt.Println("#-----#-----#")
-}
-
-func drawLine(l line, field *[10][10]int) {
-	if l.startx == l.endx {
-		lowValue := l.starty
-		highValue := l.endy
-
-		if l.starty > l.endy {
-			highValue = l.starty
-			lowValue = l.endy
-		}
-		//	vertical
-		for y := lowValue; y <= highValue; {
-			field[l.startx][y]++
-			y++
-		}
-	}
-	if l.starty == l.endy {
-		lowValue := l.startx
-		highValue := l.endx
-
-		if l.startx > l.endx {
-			highValue = l.startx
-			lowValue = l.endx
-		}
-
-		//	horiontal
-		for x := lowValue; x <= highValue; {
-			field[x][l.starty]++
-			x++
-		}
-	}
-}
-
-func part2(input []string) (result int) {
-	return
 }
 
 func main() {
@@ -102,6 +32,156 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println(part1(input))
-	//fmt.Println(part2(input))
+	fmt.Println(part1(input, 1000))
+	fmt.Println(part2(input, 1000))
+}
+
+func part1(input []string, fieldsize int) (result int) {
+	lines := parseInput(input)
+	field := make([][]int, fieldsize)
+	for i := range field {
+		field[i] = make([]int, fieldsize)
+	}
+
+	for _, line := range lines {
+		if line.start.x == line.end.x || line.start.y == line.end.y {
+			drawLine(line, field)
+		}
+	}
+
+	return countPointsHigherThan(field, 2)
+}
+
+func part2(input []string, fieldsize int) (result int) {
+	lines := parseInput(input)
+	field := make([][]int, fieldsize)
+	for i := range field {
+		field[i] = make([]int, fieldsize)
+	}
+
+	for _, line := range lines {
+		drawLine(line, field)
+	}
+
+	return countPointsHigherThan(field, 2)
+}
+
+func parseInput(input []string) (lines []ventLine) {
+	for _, s := range input {
+		split := strings.Split(s, ",")
+		points := make([]int, 4)
+
+		for i, value := range split {
+			points[i], _ = strconv.Atoi(value)
+		}
+
+		lines = append(lines, ventLine{
+			start: point{
+				x: points[0],
+				y: points[1],
+			},
+			end: point{
+				x: points[2],
+				y: points[3],
+			},
+		})
+	}
+	return
+}
+
+func countPointsHigherThan(field [][]int, limit int) int {
+	var count int
+	for i := 0; i < len(field); i++ {
+		for j := 0; j < len(field); j++ {
+			if field[i][j] >= limit {
+				count++
+			}
+		}
+	}
+
+	return count
+}
+
+//only for tests
+func printField(field [][]int) {
+	for i := 0; i < len(field); i++ {
+		for j := 0; j < len(field); j++ {
+			value := field[j][i]
+			fmt.Print(value)
+		}
+		println("")
+	}
+	fmt.Println("#-----#-----#")
+}
+
+func getPointsBetween(l ventLine) [][]int {
+	var betweenX []int
+	var betweenY []int
+
+	for x := l.start.x; ; {
+		betweenX = append(betweenX, x)
+		if x == l.end.x {
+			break
+		}
+
+		if l.start.x > l.end.x {
+			x--
+		} else {
+			x++
+		}
+
+	}
+
+	for y := l.start.y; ; {
+		betweenY = append(betweenY, y)
+		if y == l.end.y {
+			break
+		}
+		if l.start.y > l.end.y {
+			y--
+		} else {
+			y++
+		}
+
+	}
+
+	return [][]int{betweenX, betweenY}
+}
+
+func drawLine(l ventLine, field [][]int) {
+	if l.start.x == l.end.x {
+		lowValue := l.start.y
+		highValue := l.end.y
+
+		if l.start.y > l.end.y {
+			highValue = l.start.y
+			lowValue = l.end.y
+		}
+		//	vertical
+		for y := lowValue; y <= highValue; y++ {
+			field[l.start.x][y]++
+		}
+	} else if l.start.y == l.end.y {
+		lowValue := l.start.x
+		highValue := l.end.x
+
+		if l.start.x > l.end.x {
+			highValue = l.start.x
+			lowValue = l.end.x
+		}
+
+		//	horiontal
+		for x := lowValue; x <= highValue; x++ {
+			field[x][l.start.y]++
+		}
+	} else {
+		//TODO getNumbersBetwwen
+		points := getPointsBetween(l)
+		for i := 0; i < len(points[0]); i++ {
+			x := points[0][i]
+			y := points[1][i]
+
+			field[x][y]++
+		}
+	}
 }
