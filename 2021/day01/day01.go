@@ -11,7 +11,7 @@ func main() {
 	if err != nil {
 		os.Exit(1)
 	}
-	input, err := helper.InputToIntSlice(string(r))
+	input, err := helper.InputToIntSlice(string(r), ",")
 	if err != nil {
 		os.Exit(1)
 	}
