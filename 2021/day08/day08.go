@@ -46,7 +46,6 @@ func part1(input []string) (result int) {
 func part2(input []string) (result int) {
 	displays := parseInput(input)
 
-
 	for _, display := range displays {
 
 		digitCodes := make([]string, 10)
@@ -56,23 +55,27 @@ func part2(input []string) (result int) {
 			switch len(digit) {
 			case 2:
 				digitCodes[1] = digit
+				display.removeDigit(digit)
 			case 4:
 				digitCodes[4] = digit
+				display.removeDigit(digit)
 			case 3:
 				digitCodes[7] = digit
+				display.removeDigit(digit)
 			case 7:
 				digitCodes[8] = digit
+				display.removeDigit(digit)
 			}
 		}
 
 		segmentMap["a"] = strings.Trim(digitCodes[7], digitCodes[1])
-		segmentMap["g"] = findMissingSegmentCode(display.digits, &digitCodes[9], 6, digitCodes[4]+segmentMap["a"])
-		segmentMap["d"] = findMissingSegmentCode(display.digits, &digitCodes[3], 5, digitCodes[1]+segmentMap["a"]+segmentMap["g"])
+		segmentMap["g"] = findMissingSegmentCode(display, &digitCodes[9], 6, digitCodes[4]+segmentMap["a"])
+		segmentMap["d"] = findMissingSegmentCode(display, &digitCodes[3], 5, digitCodes[1]+segmentMap["a"]+segmentMap["g"])
 		segmentMap["b"] = strings.Trim(digitCodes[9], digitCodes[3])
-		segmentMap["f"] = findMissingSegmentCode(display.digits, &digitCodes[5], 5, segmentMap["a"]+segmentMap["d"]+segmentMap["g"]+segmentMap["b"])
-		segmentMap["e"] = findMissingSegmentCode(display.digits, &digitCodes[6], 6, digitCodes[5])
-		segmentMap["c"] = findMissingSegmentCode(display.digits,&digitCodes[2], 5, segmentMap["a"]+segmentMap["d"]+segmentMap["g"]+segmentMap["e"])
-		digitCodes[0] =  segmentMap["a"]+ segmentMap["b"]+ segmentMap["c"]+ segmentMap["e"]+ segmentMap["f"]+ segmentMap["g"]
+		segmentMap["f"] = findMissingSegmentCode(display, &digitCodes[5], 5, segmentMap["a"]+segmentMap["d"]+segmentMap["g"]+segmentMap["b"])
+		segmentMap["e"] = findMissingSegmentCode(display, &digitCodes[6], 6, digitCodes[5])
+		segmentMap["c"] = findMissingSegmentCode(display, &digitCodes[2], 5, segmentMap["a"]+segmentMap["d"]+segmentMap["g"]+segmentMap["e"])
+		digitCodes[0] = segmentMap["a"] + segmentMap["b"] + segmentMap["c"] + segmentMap["e"] + segmentMap["f"] + segmentMap["g"]
 		fmt.Println(getOutputValue(display.output, digitCodes))
 
 		result += getOutputValue(display.output, digitCodes)
@@ -80,6 +83,14 @@ func part2(input []string) (result int) {
 	}
 
 	return
+}
+
+func (d *Display) removeDigit(s string) {
+	for i := 0; i < len(d.digits); i++ {
+		if d.digits[i] == s {
+			d.digits[i] = ""
+		}
+	}
 }
 
 func getOutputValue(output []string, codes []string) (result int) {
@@ -95,13 +106,14 @@ func getOutputValue(output []string, codes []string) (result int) {
 	return result
 }
 
-func findMissingSegmentCode(digits []string, resultCode *string, length int, stringFilter string) string {
-	for _, digit := range digits {
+func findMissingSegmentCode(display Display, digitCodeResult *string, length int, stringFilter string) string {
+	for _, digit := range display.digits {
 		if len(digit) == length && containsChars(digit, stringFilter) {
-			*resultCode = digit
+			*digitCodeResult = digit
+			display.removeDigit(digit)
 		}
 	}
-	return strings.Trim(*resultCode, stringFilter)
+	return strings.Trim(*digitCodeResult, stringFilter)
 }
 
 func containsAllCharsAndEqualLen(a, b string) bool {
