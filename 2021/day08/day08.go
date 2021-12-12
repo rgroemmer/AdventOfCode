@@ -76,10 +76,8 @@ func part2(input []string) (result int) {
 		segmentMap["e"] = findMissingSegmentCode(display, &digitCodes[6], 6, digitCodes[5])
 		segmentMap["c"] = findMissingSegmentCode(display, &digitCodes[2], 5, segmentMap["a"]+segmentMap["d"]+segmentMap["g"]+segmentMap["e"])
 		digitCodes[0] = segmentMap["a"] + segmentMap["b"] + segmentMap["c"] + segmentMap["e"] + segmentMap["f"] + segmentMap["g"]
-		fmt.Println(getOutputValue(display.output, digitCodes))
 
 		result += getOutputValue(display.output, digitCodes)
-
 	}
 
 	return
