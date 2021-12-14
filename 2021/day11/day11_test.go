@@ -23,7 +23,7 @@ func TestDay11(t *testing.T) {
 		s, _ := helper.InputToStringSlice(string(r))
 
 		got := part2(s)
-		expected := 1924
+		expected := 195
 
 		if got != expected {
 			t.Errorf("expected '%v' but got '%v'", expected, got)

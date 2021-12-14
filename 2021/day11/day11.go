@@ -7,108 +7,8 @@ import (
 	"strconv"
 )
 
-type coordinate struct {
-	row int
-	col int
-}
-
-func parseInput(input []string) [][]int {
-	grid := make([][]int, len(input))
-	for i, line := range input {
-		grid[i] = make([]int, len(input[0]))
-		for j, char := range line {
-			grid[i][j], _ = strconv.Atoi(string(char))
-		}
-	}
-	return grid
-}
-
-func getAdjacent(row, col int) (adjacent []coordinate) {
-	for i := row - 1; i < row+2; i++ {
-		for j := col - 1; j < col+2; j++ {
-			if i == row && j == col {
-				continue
-			}
-			if (i >= 0 && j >= 0) && (i < 5 && j < 5) {
-				adjacent = append(adjacent, coordinate{row: i, col: j})
-			}
-		}
-	}
-	return
-}
-
-func incrementAll(slice [][]int) {
-	for i := 0; i < len(slice); i++ {
-		for j := 0; j < len(slice); j++ {
-			slice[i][j]++
-		}
-	}
-}
-func getFlashingOctos(grid [][]int) []coordinate {
-	var flashingList []coordinate
-	for i := 0; i < len(grid); i++ {
-		for j := 0; j < len(grid); j++ {
-			if grid[i][j] > 9 {
-				flashingList = append(flashingList, coordinate{row: i, col: j})
-			}
-		}
-	}
-	return flashingList
-}
-
-func part1(input []string) (result int) {
-	grid := parseInput(input)
-
-	for step := 0; step < 10; step++ {
-
-		//increase all by one
-		incrementAll(grid)
-
-		//get octos who will flash
-		var flashingList []coordinate
-		flashingList = getFlashingOctos(grid)
-
-		for len(flashingList) != 0 {
-			//do flash for actual octo
-			doFlash(grid, flashingList[0])
-			result++
-			//retrieve new flashing list and overwrite old
-			flashingList = getFlashingOctos(grid)
-		}
-
-		printGrid(grid)
-	}
-
-	return
-}
-
-func doFlash(grid [][]int, c coordinate) {
-	//set flashing octopus to 0
-	grid[c.row][c.col] = 0
-	//var nextFlashes []coordinate
-
-	adjacent := getAdjacent(c.row, c.col)
-	//increment all adjacent by one
-	for _, a := range adjacent {
-		if grid[a.row][a.col] != 0 {
-			grid[a.row][a.col]++
-		}
-	}
-}
-
-func printGrid(grid [][]int) {
-	for i := 0; i < len(grid); i++ {
-		for j := 0; j < len(grid); j++ {
-			fmt.Print(grid[i][j])
-		}
-		fmt.Println()
-	}
-	fmt.Println()
-}
-
-func part2(input []string) (result int) {
-
-	return
+type point struct {
+	x, y int
 }
 
 func main() {
@@ -122,4 +22,113 @@ func main() {
 	}
 	fmt.Println(part1(input))
 	fmt.Println(part2(input))
+}
+
+func part1(input []string) (result int) {
+	grid := parseInput(input)
+	for step := 0; step < 100; step++ {
+		flashed := make(map[point]bool)
+		for x := range grid {
+			for y := range grid[x] {
+				grid[x][y]++
+				if grid[x][y] > 9 {
+					flashOctopus(grid, point{x, y}, flashed)
+				}
+			}
+		}
+		result += len(flashed)
+		for k, _ := range flashed {
+			grid[k.x][k.y] = 0
+		}
+	}
+	return
+}
+
+func part2(input []string) (result int) {
+	grid := parseInput(input)
+	for step := 0; true; step++ {
+		flashed := make(map[point]bool)
+		for x := range grid {
+			for y := range grid[x] {
+				grid[x][y]++
+				if grid[x][y] > 9 {
+					flashOctopus(grid, point{x, y}, flashed)
+				}
+			}
+		}
+		for k, _ := range flashed {
+			grid[k.x][k.y] = 0
+		}
+		if checkInSync(grid) {
+			result = step + 1
+			break
+		}
+	}
+	return
+}
+
+func checkInSync(grid [][]int) bool {
+	for x := range grid {
+		for y := range grid[x] {
+			if grid[x][y] != 0 {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+func flashOctopus(grid [][]int, p point, flashed map[point]bool) {
+	//check if octopus has already flashed
+	for k, _ := range flashed {
+		if k == p {
+			return
+		}
+	}
+	//set flashing octopus to 0
+	flashed[p] = true
+
+	adjacent := getAdjacent(p)
+	//increment all adjacent by one
+	for _, ap := range adjacent {
+		grid[ap.x][ap.y]++
+		if grid[ap.x][ap.y] > 9 {
+			flashOctopus(grid, ap, flashed)
+		}
+	}
+}
+
+func parseInput(input []string) [][]int {
+	grid := make([][]int, len(input))
+	for i, line := range input {
+		grid[i] = make([]int, len(input[0]))
+		for j, char := range line {
+			grid[i][j], _ = strconv.Atoi(string(char))
+		}
+	}
+	return grid
+}
+
+func getAdjacent(p point) (adjacent []point) {
+	for i := p.x - 1; i < p.x+2; i++ {
+		for j := p.y - 1; j < p.y+2; j++ {
+			if i == p.x && j == p.y {
+				continue
+			}
+			if (i >= 0 && j >= 0) && (i < 10 && j < 10) {
+				adjacent = append(adjacent, point{x: i, y: j})
+			}
+		}
+	}
+	return
+}
+
+func printGrid(grid [][]int) {
+	for i := 0; i < len(grid); i++ {
+		for j := 0; j < len(grid); j++ {
+			fmt.Print(grid[i][j])
+		}
+		fmt.Println()
+	}
+	fmt.Println()
 }
