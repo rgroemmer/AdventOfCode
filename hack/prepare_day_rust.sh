@@ -6,7 +6,7 @@ COOKIE="session=$(cat .cookie)"
 FILE_SOURCE="https://adventofcode.com/$YEAR/day/$DAY/input"
 
 function setup {
-	cargo new $DEST_PATH
+	cargo new --vcs none $DEST_PATH
 	curl --cookie $COOKIE $FILE_SOURCE -o ./$DEST_PATH/src/input
 }
 
