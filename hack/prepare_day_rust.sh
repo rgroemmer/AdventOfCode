@@ -3,9 +3,9 @@
 YEAR=$(date +"%Y")
 DAY=$(date +"%-d")
 COOKIE="session=$(cat .cookie)"
-FILE_SOURCE="https://adventofcode.com/$YEAR/day/$DAY/input"
 
 function setup {
+	FILE_SOURCE="https://adventofcode.com/$YEAR/day/$d/input"
 	cargo new --vcs none $DEST_PATH
 	curl --cookie $COOKIE $FILE_SOURCE -o ./$DEST_PATH/src/input
 }
